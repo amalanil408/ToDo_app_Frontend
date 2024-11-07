@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/BLoC/todo_bloc.dart';
 import 'package:todo_app/models/models.dart';
+import 'package:todo_app/widgets/snack_bar.dart';
 
 class TodoTextField extends StatelessWidget {
   const TodoTextField({
@@ -47,15 +48,20 @@ class TodoTextField extends StatelessWidget {
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {
-              final todo = Todo(
+              if(titleController.text.isEmpty && descriptionController.text.isEmpty){
+                showSnackBarWidget(context, "Enter Fields", Colors.red);
+              } else {
+                final todo = Todo(
                 id: '',
                 title: titleController.text,
                 description: descriptionController.text,
                 isCompleted: false,
+                createdAt: DateTime.now()
               );
               BlocProvider.of<TodoBloc>(context).add(AddTodo(todo));
               titleController.clear();
               descriptionController.clear();
+              }
             },
             style: ElevatedButton.styleFrom(
               minimumSize: const Size(double.infinity, 50),

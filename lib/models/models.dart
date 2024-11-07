@@ -3,12 +3,14 @@ class Todo {
   final String title;
   final String description;
   final bool isCompleted;
+  final DateTime createdAt;
 
   Todo({
     required this.id,
     required this.title,
     required this.description,
-    required this.isCompleted
+    required this.isCompleted,
+    required this.createdAt
   });
 
 
@@ -17,7 +19,8 @@ class Todo {
       id: json['_id'], 
       title: json['title'], 
       description: json['description'],
-      isCompleted: json['isCompleted']
+      isCompleted: json['isCompleted'],
+      createdAt: DateTime.parse(json['createdAt']),
       );
   }
 
@@ -26,7 +29,8 @@ class Todo {
       '_id' : id,
       'title' : title,
       "description" : description,
-      'isCompleted' : isCompleted
+      'isCompleted' : isCompleted,
+      'createdAt' : createdAt.toIso8601String(),
     };
   }
 }

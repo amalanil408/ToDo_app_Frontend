@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:todo_app/BLoC/todo_bloc.dart';
 import 'package:todo_app/models/models.dart';
 import 'package:todo_app/widgets/delete_alert.dart';
-import 'package:todo_app/widgets/edit_todo.dart';
+import 'package:todo_app/widgets/update_todo.dart';
 
 class TodoExpandedWidget extends StatelessWidget {
   const TodoExpandedWidget({
@@ -22,6 +23,7 @@ class TodoExpandedWidget extends StatelessWidget {
               itemCount: state.todo.length,
               itemBuilder: (context, index) {
                 final todo = state.todo[index];
+                String formatedDate = DateFormat.yMMMd().format(todo.createdAt);
                 return Card(
                   margin: const EdgeInsets.symmetric(vertical: 8.0),
                   elevation: 4,
@@ -39,9 +41,15 @@ class TodoExpandedWidget extends StatelessWidget {
                         color: todo.isCompleted ? Colors.grey : Colors.black,
                       ),
                     ),
-                    subtitle: Text(
-                      todo.description,
-                      style: const TextStyle(color: Colors.grey),
+                    subtitle: Column(
+                      children: [
+                        Text(todo.description,
+                        style: const TextStyle(
+                          color: Colors.grey
+                        ),
+                        ),
+                        Text('📅 : $formatedDate')
+                      ],
                     ),
                     leading: Checkbox(
                       value: todo.isCompleted,
@@ -51,6 +59,7 @@ class TodoExpandedWidget extends StatelessWidget {
                           title: todo.title,
                           description: todo.description,
                           isCompleted: value!,
+                          createdAt: DateTime.now()
                         );
                         BlocProvider.of<TodoBloc>(context).add(UpdateTodo(updatedTodo));
                       },
@@ -72,6 +81,7 @@ class TodoExpandedWidget extends StatelessWidget {
                                     title: updatedTitle,
                                     description: updatedDescription,
                                     isCompleted: todo.isCompleted,
+                                    createdAt: DateTime.now()
                                   );
                                   BlocProvider.of<TodoBloc>(context).add(UpdateTodo(updatedTodo));
                                 },
